@@ -93,8 +93,23 @@ class MiniMaple{
         .attr("transform", "rotate(-90)")
         .html("y")
 
+      //   +8x^2+7y^2+8   [+, +, +]   [8x^2, 7y, 8]
+
+      // +8x^2+7y+8=0
+      //  8x^2+8=-7y^2
+      //(8x^2+8)/(-7)
+      //
+      //
+      //
+
+
+
+
+      // крч, не ебать мозг и делать константами (обнулять), 
+      //все переменные, которые не соответствуют variable
+      //
       function f(x) {
-        return x * x;
+        return x;
       }
 
       function graphFunction() {

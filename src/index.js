@@ -24,8 +24,7 @@ calculate.onclick = function() {
     }
     else{
         res = maple.derivative(equation, variable);
-        //answer.removeChild(node);
-        //answer.removeChild(node);
+
         maple.graph();
 
     }
