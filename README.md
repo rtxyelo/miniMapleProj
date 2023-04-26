@@ -1,7 +1,7 @@
 ## MiniMaple
 
 Write the symbolic diff function
-
+trtrtrtrtrtrt
 Example:
 ```
 4*x^3, x //=> 12*x^2
