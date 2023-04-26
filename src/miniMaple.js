@@ -62,19 +62,19 @@ class MiniMaple{
         .attr("height", height)
 
       // Add Axes
-      const xMax = 4;
-      const yMax = 5;
+      const xMax = 10;
+      const yMax = 10;
 
-      let xScale = d3.scaleLinear([0, xMax], [0, width])
-      let yScale = d3.scaleLinear([0, yMax], [height, 0])
+      let xScale = d3.scaleLinear([-xMax, xMax], [0, width])
+      let yScale = d3.scaleLinear([-yMax, yMax], [height, 0])
 
       let xAxis = d3.axisBottom(xScale)
       let yAxis = d3.axisLeft(yScale)
       svg.append("g")
-        .attr("transform", `translate(0,${height})`)
+        .attr("transform", `translate(0,${height/2})`)
         .call(xAxis)
       svg.append("g")
-        .attr("transform", `translate(0,0)`)
+        .attr("transform", `translate(${width/2},0)`)
         .call(yAxis)
 
       // Axes label
@@ -94,15 +94,15 @@ class MiniMaple{
         .html("y")
 
       function f(x) {
-        return x * 2 + 1;
+        return x * x;
       }
 
       function graphFunction() {
-        pointNum = 500;
+        let pointNum = 500;
 
         const data = [];
-        for (let x = 0; x <= pointNum; x++) {
-          y = f(x);
+        for (let x = -500; x <= pointNum; x++) {
+          let y = f(x);
           data.push([x, y])
         }
         return data;
@@ -120,7 +120,7 @@ class MiniMaple{
         .attr("stroke-width", 2)
         .attr("d", line);
 
-
+        graphFunction();
     }
 
 }
