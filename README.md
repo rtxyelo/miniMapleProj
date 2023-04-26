@@ -1,4 +1,4 @@
-## MiniMaple 228
+## MiniMaple
 
 Write the symbolic diff function
 
