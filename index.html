@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Project</title>
+        <meta charset="utf-8"/>
+
+        <!-- Load d3.js -->
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+    </head>
+<body>
+ <form>
+  <h1>Write your expression:</h1>
+  <div>
+    <input id="expression" >
+  </div>
+  <div>
+    <input id="variable" >
+  </div>
+  <div></div>
+  <button type="button" id="calculate" >calculate</button>
+
+  <div class="container">
+    <svg id="root"></svg>
+  </div>
+
+  <div id="answer"> </div>
+ </form>
+
+ <script src="src/index.js" type="module"></script>
+<body>
+</html>
