@@ -40,7 +40,7 @@ class MiniMaple{
 
 
 
-    graph(){
+    graph(exp, variable){
       // Convention: https://bl.ocks.org/mbostock/3019563
       const margin = { top: 10, right: 50, bottom: 50, left: 50 },
         width = 450 - margin.left - margin.right,
@@ -105,11 +105,26 @@ class MiniMaple{
 
 
 
-      // крч, не ебать мозг и делать константами (обнулять), 
-      //все переменные, которые не соответствуют variable
-      //
-      function f(x) {
-        return x;
+
+      function f(exp, variable, eqvariable) {
+        let res = 0
+        let derivTerm = 0
+        const [listOfSigns, listOfTerms] = getListOfTermsAndSigns(exp)
+        for (let i = 0; i < listOfTerms.length; i++) {
+            derivTerm = getGraphFromTerm(listOfTerms[i], variable, eqvariable)
+            console.log(derivTerm)
+            if (derivTerm == 0) {
+                continue
+            }
+            if (listOfSigns[i] == "+") {
+              res += derivTerm
+            }
+            else {
+              res -= derivTerm
+            }
+        }
+        
+        return res
       }
 
       function graphFunction() {
@@ -117,7 +132,7 @@ class MiniMaple{
 
         const data = [];
         for (let x = -500; x <= pointNum; x++) {
-          let y = f(x);
+          let y = f(exp, variable, x);
           data.push([x, y])
         }
         return data;
@@ -194,6 +209,36 @@ function getDerivativeFromTerm(term, variable) {
     }
     return res
 }
+
+//   +8x^2+7x+8-4y   [+, +, +]   [8x^2, 7x, 8]
+// 8x^2  ->  16*x
+function getGraphFromTerm(term, variable, eqvariable) {
+  let res = 0
+  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)(?:\\^(\\d+))?`)
+  const matches = term.match(regex1)
+  if (matches != null) {
+      let mult = 1
+      if (matches[1] != undefined ) {
+          mult = Number(matches[1])
+      }
+      let power = 1
+      if (matches[3] != undefined) {
+          power = Number(matches[3])
+      }
+      if (matches[2]==variable) {
+        res = mult * eqvariable**power  
+      }
+      else {
+        res = mult
+      }
+  }
+  return res
+}
+
+
+
+
+
 
 function getListOfTermsAndSigns(exp) {
     let tmp = ""

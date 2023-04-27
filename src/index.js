@@ -25,7 +25,7 @@ calculate.onclick = function() {
     else{
         res = maple.derivative(equation, variable);
 
-        maple.graph();
+        maple.graph(equation, variable);
 
     }
 
