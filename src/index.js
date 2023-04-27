@@ -12,6 +12,7 @@ calculate.onclick = function() {
 
     let answer = document.querySelector("div#answer");
     //answer.removeChild(answer.firstChild);
+    let grap;
 
     let variable = document.getElementById('variable').value;
     let equation = document.getElementById('expression').value;
@@ -19,13 +20,15 @@ calculate.onclick = function() {
         answer.removeChild(answer.firstChild);
     }
     let res = '';
+    let res2 = '';
     if(!variable.match(/[a-z]/)){
         res = 'Error';
     }
     else{
         res = maple.derivative(equation, variable);
-
-        maple.graph(equation, variable);
+        res2 = maple.integral(equation, variable);
+         
+        grap = maple.graph(equation, variable);
 
     }
 
@@ -37,16 +40,5 @@ calculate.onclick = function() {
 
     node = document.createTextNode("Интеграл:" + res);
     answer.appendChild(node);
-
-
-
-
-
-    //node = document.createElement('br')
-    //answer.appendChild(node);
-
-    //node = document.createElement("Граф:" + res2);
-    //node = document.createTextNode("Граф:" + res2);
-    //answer.appendChild(node);
 
 };

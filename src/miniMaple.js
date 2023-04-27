@@ -38,9 +38,9 @@ class MiniMaple{
     }
 
 
-
-
     graph(exp, variable){
+      // Удаление всех элементов находящихся в группе svg
+      d3.select("#root").selectAll("*").remove();
       // Convention: https://bl.ocks.org/mbostock/3019563
       const margin = { top: 10, right: 50, bottom: 50, left: 50 },
         width = 450 - margin.left - margin.right,
@@ -50,7 +50,7 @@ class MiniMaple{
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+      
       // Define chart area
       svg
         .append("clipPath")
@@ -93,26 +93,13 @@ class MiniMaple{
         .attr("transform", "rotate(-90)")
         .html("y")
 
-      //   +8x^2+7y^2+8   [+, +, +]   [8x^2, 7y, 8]
-
-      // +8x^2+7y+8=0
-      //  8x^2+8=-7y^2
-      //(8x^2+8)/(-7)
-      //
-      //
-      //
-
-
-
-
-
       function f(exp, variable, eqvariable) {
         let res = 0
         let derivTerm = 0
         const [listOfSigns, listOfTerms] = getListOfTermsAndSigns(exp)
         for (let i = 0; i < listOfTerms.length; i++) {
             derivTerm = getGraphFromTerm(listOfTerms[i], variable, eqvariable)
-            console.log(derivTerm)
+            //console.log(derivTerm)
             if (derivTerm == 0) {
                 continue
             }
@@ -128,10 +115,10 @@ class MiniMaple{
       }
 
       function graphFunction() {
-        let pointNum = 500;
+        let pointNum = 100;
 
         const data = [];
-        for (let x = -500; x <= pointNum; x++) {
+        for (let x = -pointNum; x <= pointNum; x++) {
           let y = f(exp, variable, x);
           data.push([x, y])
         }
@@ -161,13 +148,15 @@ class MiniMaple{
 
 
 // 2*x^2 -> 2*x^3/3
+// 4x -> 4*x^2/2
 // 5 -> 5*x
-
+// 0 -> C 
 function getIntegralFromTerm(term, variable){
   let res = ""
-  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)(?:\\^(\\d+))?`);
+  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`);
   const matches = term.match(regex1)
   if (matches != null) {
+      console.log(matches)
       let mult = 1
       if (matches[1] != undefined ) {
           mult = Number(matches[1])
@@ -214,12 +203,14 @@ function getDerivativeFromTerm(term, variable) {
 // 8x^2  ->  16*x
 function getGraphFromTerm(term, variable, eqvariable) {
   let res = 0
-  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)(?:\\^(\\d+))?`)
+  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`)
   const matches = term.match(regex1)
+  //console.log(matches)
   if (matches != null) {
       let mult = 1
       if (matches[1] != undefined ) {
           mult = Number(matches[1])
+          //console.log(mult)
       }
       let power = 1
       if (matches[3] != undefined) {
@@ -228,9 +219,7 @@ function getGraphFromTerm(term, variable, eqvariable) {
       if (matches[2]==variable) {
         res = mult * eqvariable**power  
       }
-      else {
-        res = mult
-      }
+      //console.log("mult:", mult, "power:", power, "variable:", variable)
   }
   return res
 }
