@@ -2,7 +2,7 @@ import {MiniMaple} from './miniMaple.js'
 
 
 window.onload = function() {
-    document.querySelector('input#expression').value = "x^2";
+    document.querySelector('input#expression').value = "2x^4";
     document.querySelector('input#variable').value = "x";
 }
 
@@ -32,13 +32,13 @@ calculate.onclick = function() {
 
     }
 
-    let node = document.createTextNode("Производная:" + res);
+    let node = document.createTextNode("Производная: " + res);
     answer.appendChild(node);
 
     node = document.createElement('br')
     answer.appendChild(node);
 
-    node = document.createTextNode("Интеграл:" + res);
+    node = document.createTextNode("Интеграл: " + res2);
     answer.appendChild(node);
 
 };

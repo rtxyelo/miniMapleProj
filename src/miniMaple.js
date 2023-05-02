@@ -31,7 +31,10 @@ class MiniMaple{
           res += listOfSigns[i]+derivTerm
       }
       if (res == "") {
-          return "0"
+          return "C"
+      }
+      else {
+        res += "+C"
       }
       res = res.substring(1);
       return res
@@ -62,8 +65,8 @@ class MiniMaple{
         .attr("height", height)
 
       // Add Axes
-      const xMax = 10;
-      const yMax = 10;
+      const xMax = 5;
+      const yMax = 5;
 
       let xScale = d3.scaleLinear([-xMax, xMax], [0, width])
       let yScale = d3.scaleLinear([-yMax, yMax], [height, 0])
@@ -115,7 +118,7 @@ class MiniMaple{
       }
 
       function graphFunction() {
-        let pointNum = 100;
+        let pointNum = 10;
 
         const data = [];
         for (let x = -pointNum; x <= pointNum; x++) {
@@ -147,31 +150,47 @@ class MiniMaple{
 
 
 
-// 2*x^2 -> 2*x^3/3
-// 4x -> 4*x^2/2
-// 5 -> 5*x
+// 2*x^4 -> 2*x^5/5 + C
+// 4x -> 4*x^2/2 + C
+// 5 -> 5*x + C
 // 0 -> C 
+// x -> x^2/2 + C
 function getIntegralFromTerm(term, variable){
   let res = ""
-  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`);
+  //const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`);
+  const regex1 = new RegExp(`(\\d+)?\\*?(\\w)?(?:\\^(\\d+))?`);
   const matches = term.match(regex1)
-  if (matches != null) {
+  //console.log("term: ", term)
+  if (matches != null && matches[0] != '') {
       console.log(matches)
       let mult = 1
-      if (matches[1] != undefined ) {
+      if (matches[1] != undefined) {
           mult = Number(matches[1])
       }
+
       let power = 1
       if (matches[3] != undefined) {
           power = Number(matches[3])
       }
+
       //mult = mult * ( power - 1 > 0 ? power : 1)
-      let multStr = (mult>0 ? mult.toString() : "")
+      let multStr = (mult>1 ? mult.toString() : "")
       if (multStr != "") {
           multStr += "*"
       }
-      res = multStr + ( power > 1 ? variable : "") + ( power - 1 > 1 ? "^" + (power - 1).toString() : "")
-  }
+      if (matches[1] == "0"){
+          res = ""
+      }
+      else if (matches[2] != undefined && matches[2] == variable){
+          res = multStr + variable + "^" + (power+1).toString() + "/" + (power+1).toString()
+      }
+      else if (matches[2] != undefined && matches[2] != variable){
+        res = multStr + (matches[2]).toString() + (power>1 ? "^"+(power).toString(): "") + "*" + variable
+    }
+      else {
+        res = multStr + variable
+      }
+    }
   return res
 }
 //   +8x^2+7x+8   [+, +, +]   [8x^2, 7x, 8]
@@ -180,8 +199,9 @@ function getDerivativeFromTerm(term, variable) {
     let res = ""
     const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)(?:\\^(\\d+))?`);
     const matches = term.match(regex1)
+    //console.log(matches)  
     if (matches != null) {
-        let mult = 1
+      let mult = 1
         if (matches[1] != undefined ) {
             mult = Number(matches[1])
         }
@@ -194,7 +214,12 @@ function getDerivativeFromTerm(term, variable) {
         if (multStr != "" && power > 1) {
             multStr += "*"
         }
-        res = multStr + ( power > 1 ? variable : "") + ( power - 1 > 1 ? "^" + (power - 1).toString() : "")
+        if (matches[1] == "0"){
+            res = ""
+        }
+        else {
+            res = multStr + ( power > 1 ? variable : "") + ( power - 1 > 1 ? "^" + (power - 1).toString() : "")
+        }
     }
     return res
 }
@@ -203,14 +228,16 @@ function getDerivativeFromTerm(term, variable) {
 // 8x^2  ->  16*x
 function getGraphFromTerm(term, variable, eqvariable) {
   let res = 0
-  const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`)
+  //const regex1 = new RegExp(`(\\d+)?\\*?(`+variable+`)?(?:\\^(\\d+))?`)
+  const regex1 = new RegExp(`(\\d+)?\\*?(\\w)?(?:\\^(\\d+))?`);
   const matches = term.match(regex1)
-  //console.log(matches)
+  console.log(matches)
   if (matches != null) {
       let mult = 1
-      if (matches[1] != undefined ) {
+      if ((matches[1] != undefined) && (matches[2]==undefined || matches[2]==variable)) {
           mult = Number(matches[1])
           //console.log(mult)
+          res = mult
       }
       let power = 1
       if (matches[3] != undefined) {
